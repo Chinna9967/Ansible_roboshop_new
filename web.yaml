@@ -28,10 +28,10 @@
       url: https://roboshop-builds.s3.amazonaws.com/web.zip
       dest: /tmp
 
-  - name: extract the code in web zip file to /app folder
+  - name: extract the code in web zip file to html folder
     ansible.builtin.unarchive:
       src: /tmp/web.zip
-      dest: /app
+      dest: /usr/share/nginx/html
       remote_src: yes
 
   - name: creating a roboshop conf and copy
