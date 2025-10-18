@@ -65,8 +65,8 @@
       fi
       go mod tidy
       go build
-      args:
-        chdir: /app
+    args:
+      chdir: /app
 
   - name: creating a dispatch service and copy
     ansible.builtin.copy:
