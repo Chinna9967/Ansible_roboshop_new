@@ -87,7 +87,7 @@
       state: installed
 
   - name: load schema into shipping
-    ansible.built.command: mysql -h mysql.kpdigital.fun -uroot -pRoboShop@1 < /app/schema/shipping.sql 
+    ansible.builtin.command: mysql -h mysql.kpdigital.fun -uroot -pRoboShop@1 < /app/schema/shipping.sql 
 
   - name: restart shipping service
     ansible.builtin.service:
