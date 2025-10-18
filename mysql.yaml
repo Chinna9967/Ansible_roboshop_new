@@ -3,10 +3,8 @@
   become: yes  
   tasks: 
   - name: Disable nodejs module
-    ansible.builtin.command: dnf module disable -y nodejs
-    args:
-      warn: false # Suppress the warning about using the command module
-
+    ansible.builtin.command: yum module disable -y nodejs
+    
   - name: copy mysql repo to yum.repos.d
     ansible.builtin.copy:
       src: mysql.repo
