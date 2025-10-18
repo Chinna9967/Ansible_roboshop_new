@@ -69,12 +69,12 @@
 
   - name: reload the daemon
     ansible.builtin.systemd:
-      name: catalogue
+      name: dispatch
       state: restarted
       daemon_reload: true
 
   - name: enabling mongodb-org
     ansible.builtin.service:
-      name: mongod
+      name: dispatch
       state: started
       enabled: yes
