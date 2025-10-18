@@ -58,7 +58,9 @@
       remote_src: yes
 
   - name: isntalling npm dependencies
-    ansible.builtin.shell: "go mod init dispatch && go get && go build"
+    ansible.builtin.shell: "if [ ! -f go.mod ]; then
+      go mod init dispatch
+    fi && go get && go build"
     args:
       chdir: /app
 
