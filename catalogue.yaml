@@ -52,7 +52,7 @@
       dest: /tmp
 
   - name: extract the code in catalogue zip file to /app folder
-    ansible.built.unarchive:
+    ansible.builtin.unarchive:
       src: /tmp/catalogue.zip
       dest: /app
       remote_src: yes
