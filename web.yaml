@@ -7,9 +7,9 @@
       name: nginx
       state: installed
 
-  - name: enabling mongodb-org
+  - name: enabling nginx
     ansible.builtin.service:
-      name: mongod
+      name: nginx
       state: started
       enabled: yes  
 
