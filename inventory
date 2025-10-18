@@ -25,6 +25,9 @@ shipping.kpdigital.fun
 [rabbitmq]
 rabbitmq.kpdigital.fun
 
+[payment]
+payment.kpdigital.online
+
 [shipping]
 shipping.kpdigital.fun
 
