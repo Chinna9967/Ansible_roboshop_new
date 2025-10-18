@@ -75,7 +75,7 @@
   
   - name: enabling mongodb-org
     ansible.builtin.service:
-      name: mongod
+      name: mongodb-org
       state: started
       enabled: yes 
 
@@ -92,6 +92,11 @@
   - name: laod schema into catalogue
     ansible.builtin.shell: mongo --host mongodb.kpdigital.fun </app/schema/catalogue.js
 
+  - name: restart catalogue
+    ansible.builtin.service:
+      name: catalogue
+      state: restarted
+      enabled: true
   
 
 
