@@ -87,7 +87,7 @@
       state: installed
 
   - name: load schema into shipping
-    ansible.builtin.shell: mysql -h mysql.kpdigital.fun -uroot -pRoboShop@1 < /app/schema/schema.sql
+    ansible.builtin.shell: mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -pRoboShop@1 < /app/db/schema.sql
 
   - name: load schema into shipping
     ansible.builtin.shell: mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -pRoboShop@1 < /app/db/app-user.sql 
