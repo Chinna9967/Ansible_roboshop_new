@@ -1,10 +1,13 @@
-- name: installing shipping component 
-  hosts: shipping
+- name: installing dispatch component 
+  hosts: dispatch
   become: yes  
   tasks:
-  - name: installing maven
+  - name: setup nodejs repo
+    ansible.builtin.shell: curl -sL https://rpm.nodesource.com/setup_lts.x | bash
+
+  - name: installing golang
     ansible.builtin.yum:
-      name: maven 
+      name: golang  
       state: installed
 
   - name: check roboshop user exist or not
@@ -43,53 +46,35 @@
       mode: "0755"
     when: directory.stat.exists == False
 
-  - name: downloading shipping code
+  - name: downloading dispatch code
     ansible.builtin.get_url: 
-      url: https://roboshop-builds.s3.amazonaws.com/shipping.zip
+      url: https://roboshop-builds.s3.amazonaws.com/dispatch.zip
       dest: /tmp
 
-  - name: extract the code in shipping zip file to /app folder
+  - name: extract the code in dispatch zip file to /app folder
     ansible.builtin.unarchive:
-      src: /tmp/shipping.zip
+      src: /tmp/dispatch.zip
       dest: /app
       remote_src: yes
 
   - name: isntalling npm dependencies
-    ansible.builtin.shell: mvn clean package
-    args:
-      chdir: /app
-  
-  - name: rename jar file
-    ansible.builtin.command: mv target/shipping-1.0.jar shipping.jar
+    ansible.builtin.shell: "go mod init dispatch && go get && go build"
     args:
       chdir: /app
 
-  - name: creating a service and copy
+  - name: creating a dispatch service and copy
     ansible.builtin.copy:
-      src: shipping.service
-      dest: /etc/systemd/system/shipping.service
+      src: dispatch.service
+      dest: /etc/systemd/system/dispatch.service
 
   - name: reload the daemon
     ansible.builtin.systemd:
-      name: shipping
+      name: catalogue
       state: restarted
       daemon_reload: true
 
-  - name: enabling and start shipping service
+  - name: enabling mongodb-org
     ansible.builtin.service:
-      name: shipping
+      name: mongod
       state: started
       enabled: yes
-
-  - name: installing mysql client
-    ansible.builtin.yum:
-      name: mysql 
-      state: installed
-
-  - name: load schema into shipping
-    ansible.builtin.shell: mysql -h mysql.kpdigital.fun -uroot -pRoboShop@1 < /app/schema/shipping.sql 
-
-  - name: restart shipping service
-    ansible.builtin.service:
-      name: shipping
-      state: restarted
