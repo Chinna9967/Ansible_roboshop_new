@@ -57,12 +57,16 @@
       dest: /app
       remote_src: yes
 
-  - name: isntalling npm dependencies
-    ansible.builtin.shell: "if [ ! -f go.mod ]; then
-      go mod init dispatch
-    fi && go get && go build"
-    args:
-      chdir: /app
+  - name: install dependencies and build
+    ansible.builtin.shell: |
+      cd /app
+      if [ ! -f go.mod ]; then
+        go mod init dispatch
+      fi
+      go mod tidy
+      go build
+      args:
+        chdir: /app
 
   - name: creating a dispatch service and copy
     ansible.builtin.copy:
