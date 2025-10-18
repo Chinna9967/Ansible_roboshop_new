@@ -3,7 +3,7 @@
   become: yes  
   tasks:
   - name: installing maven
-    ansible.builtin.yum:
+    ansible.builtin.dnf:
       name: maven 
       state: installed
 
@@ -82,13 +82,19 @@
       enabled: yes
 
   - name: installing mysql client
-    ansible.builtin.yum:
+    ansible.builtin.dnf:
       name: mysql 
       state: installed
 
   - name: load schema into shipping
-    ansible.builtin.shell: mysql -h mysql.kpdigital.fun -uroot -pRoboShop@1 < /app/schema/shipping.sql 
+    ansible.builtin.shell: mysql -h mysql.kpdigital.fun -uroot -pRoboShop@1 < /app/schema/schema.sql
 
+  - name: load schema into shipping
+    ansible.builtin.shell: mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -pRoboShop@1 < /app/db/app-user.sql 
+
+  - name: load schema into shipping
+    ansible.builtin.shell: mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -pRoboShop@1 < /app/db/master-data.sql 
+   
   - name: restart shipping service
     ansible.builtin.service:
       name: shipping
