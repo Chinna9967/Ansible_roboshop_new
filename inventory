@@ -6,3 +6,6 @@ catalogue.kpdigital.fun
 
 [web]
 web.kpdigital.fun
+
+[redis]
+redis.kpdigital.fun
