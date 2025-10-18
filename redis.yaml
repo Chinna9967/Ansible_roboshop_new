@@ -3,9 +3,9 @@
   become: yes
   tasks:
   - name: Install the latest version of redis
-  ansible.builtin.dnf:
-    name: redis
-    state: installed
+    ansible.builtin.dnf:
+      name: redis
+      state: installed
 
   - name: Allow remote connections to redis
     ansible.builtin.replace:
