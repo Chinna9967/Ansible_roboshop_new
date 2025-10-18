@@ -1,0 +1,27 @@
+- name: configuring mysql db
+  hosts: mysql
+  become: yes  
+  tasks: 
+  - name: Disable nodejs module
+    ansible.builtin.command: dnf module disable -y nodejs
+    args:
+      warn: false # Suppress the warning about using the command module
+
+  - name: copy mysql repo to yum.repos.d
+    ansible.builtin.copy:
+      src: mysql.repo
+      dest: /etc/yum.repos.d/mysql.repo
+
+  - name: installing mysql community server
+    ansible.builtin.yum:
+      name: mysql-community-server 
+      state: installed
+
+  - name: enabling mongodb-org
+    ansible.builtin.service:
+      name: mongod
+      state: started
+      enabled: yes 
+
+  - name: setting root password
+    ansible.builtin.command: mysql_secure_installation --set-root-pass RoboShop@1
