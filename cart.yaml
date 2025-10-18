@@ -27,7 +27,7 @@
   - when: out.rc != 0
     name: create cart roboshop
     become: yes # we need sudo access for this task only
-    ansible.builtin.cart:
+    ansible.builtin.user:
       name: roboshop
      #if this expression is true then only this module will run
   - name: check /app exist or not
