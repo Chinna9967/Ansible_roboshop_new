@@ -21,3 +21,9 @@ mysql.kpdigital.fun
 
 [shipping]
 shipping.kpdigital.fun
+
+[rabbitmq]
+rabbitmq.kpdigital.fun
+
+[shipping]
+shipping.kpdigital.fun
