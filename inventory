@@ -12,3 +12,6 @@ redis.kpdigital.fun
 
 [user]
 user.kpdigital.fun
+
+[cart]
+cart.kpdigital.fun
