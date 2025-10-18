@@ -9,3 +9,6 @@ web.kpdigital.fun
 
 [redis]
 redis.kpdigital.fun
+
+[user]
+user.kpdigital.fun
