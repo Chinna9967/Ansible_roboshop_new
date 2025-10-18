@@ -18,9 +18,9 @@
       name: mysql-community-server 
       state: present
 
-  - name: enabling mongodb-org
+  - name: enabling mysql service
     ansible.builtin.service:
-      name: mongod
+      name: mysqld
       state: started
       enabled: yes 
 
