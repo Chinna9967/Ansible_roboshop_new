@@ -46,4 +46,53 @@
       mode: "0755"
     when: directory.stat.exists == False
 
+  - name: downloading catalogue code
+    ansible.builtin.get_url: 
+      url: https://roboshop-builds.s3.amazonaws.com/catalogue.zip
+      dest: /tmp
+
+  - name: extract the code in catalogue zip file to /app folder
+    ansible.built.unarchive:
+      src: /tmp/catalogue.zip
+      dest: /app
+      remote_src: yes
+
+  - name: isntalling npm dependencies
+    ansible.builtin.shell: npm install
+    args:
+      chdir: /app
+
+  - name: creating a service and copy
+    ansible.builtin.copy:
+      src: catalogue.service
+      dest: /etc/systemd/system/catalogue.service
+
+  - name: reload the daemon
+    ansible.builtin.systemd:
+      name: catalogue
+      state: restarted
+      daemon_reload: true
+  
+  - name: enabling mongodb-org
+    ansible.builtin.service:
+      name: mongod
+      state: started
+      enabled: yes 
+
+  - name: setup mongodb repo
+    ansible.builtin.copy:
+      src: mongodb.repo
+      dest: /etc/yum.repos.d/mongo.repo
+
+  - name: installing mongodb client shell
+    ansible.builtin.yum:
+      name: mongodb-org-shell 
+      state: installed
+
+  - name: laod schema into catalogue
+    ansible.builtin.shell: mongo --host mongodb.kpdigital.fun </app/schema/catalogue.js
+
+  
+
+
   
