@@ -19,8 +19,10 @@
       state: restarted
       enabled: true
 
-  - name: create rabbitmq user
-    ansible.builtin.shell: rabbitmqctl add_user roboshop roboshop123
+  - name: Create RabbitMQ user roboshop if not exists
+    shell: |
+      rabbitmqctl list_users | grep -w roboshop || rabbitmqctl add_user roboshop roboshop123
+
 
   - name: setup permissions
     ansible.builtin.shell: rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
