@@ -1,65 +1,50 @@
-- name: installing payment component 
+- name: Install Payment
   hosts: payment
-  become: yes  
+  become: yes
   tasks:
-  - name: installing py gcc pydevel
+  - name: Install Python
     ansible.builtin.yum:
       name: "{{item}}"
       state: installed
     loop:
-    - python36 
+    - python36
     - gcc
     - python3-devel
 
   - name: check roboshop user exist or not
-    # when you want to run linux commands directly i.e in the case ansible module not available
-    # when the user does not exists, ansible treating this failure and comeout by default
-    # ignore_errors: true
     ansible.builtin.command: id roboshop
     register: out #output is variable name
     ignore_errors: true
 
-  - name: print the command output
-    ansible.builtin.debug:
-      msg: "output is: {{out}}"
-  - name: print exit status
-    ansible.builtin.debug:
-      msg: "{{out.rc}}"
   - when: out.rc != 0
     name: create user roboshop
     become: yes # we need sudo access for this task only
     ansible.builtin.user:
       name: roboshop
-     #if this expression is true then only this module will run
-  - name: check /app exist or not
+
+  - name: check /app directory exists or not
     ansible.builtin.stat:
       path: /app
     register: directory
 
-  - name: print directory status
+  - name: print the directory stats
     ansible.builtin.debug:
       msg: "output: {{directory}}"
 
-  - name: create directory if not exists
+  - when: directory.stat.exists == False
+    name: create /app directory
     ansible.builtin.file:
       path: /app
       state: directory
-      mode: "0755"
-    when: directory.stat.exists == False
 
-  - name: downloading payment code
-    ansible.builtin.get_url: 
-      url: https://roboshop-builds.s3.amazonaws.com/payment.zip
-      dest: /tmp
-
-  - name: extract the code in payment zip file to /app folder
+  - name: Download payment and extract
     ansible.builtin.unarchive:
-      src: /tmp/payment.zip
+      src: https://roboshop-builds.s3.amazonaws.com/payment.zip
       dest: /app
       remote_src: yes
 
-  - name: isntalling npm dependencies
-    ansible.builtin.shell: pip3.6 install -r requirements.txt
+  - name: Install dependencies
+    ansible.builtin.command: pip3.6 install -r requirements.txt
     args:
       chdir: /app
 
@@ -77,3 +62,5 @@
       name: payment
       state: restarted
       enabled: true
+
+  
